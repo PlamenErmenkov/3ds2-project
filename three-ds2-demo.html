@@ -6,7 +6,6 @@
     <title>3DS2 Protocol Demo</title>
     <script src="https://cdn.tailwindcss.com"></script>
 
-    <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link
       href="https://fonts.googleapis.com/css2?family=Lora:wght@500;600&family=DM+Sans:wght@300;400;500&display=swap"
@@ -38,6 +37,165 @@
       .product-card:hover .card-img {
         transform: scale(1.05);
       }
+
+      #systemLog {
+        font-family: monospace;
+      }
+
+      .tooltip {
+        position: relative;
+        cursor: pointer;
+      }
+
+      .tooltip span {
+        visibility: hidden;
+        width: 180px;
+        background-color: #111;
+        color: #fff;
+        text-align: left;
+        border-radius: 6px;
+        padding: 6px;
+        position: absolute;
+        z-index: 10;
+        top: 125%;
+        left: 50%;
+        transform: translateX(-50%);
+        font-size: 11px;
+        line-height: 1.2;
+        opacity: 0;
+        transition: opacity 0.3s;
+      }
+
+      .tooltip:hover span {
+        visibility: visible;
+        opacity: 1;
+      }
+
+      /* ── Step Indicator ── */
+      .stepper {
+        display: flex;
+        align-items: flex-start;
+      }
+
+      .step {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        flex: 1;
+        position: relative;
+      }
+
+      .step-connector {
+        flex: 1;
+        height: 2px;
+        margin-top: 19px;
+        transition: background 0.4s ease;
+        background: #e2e8f0;
+      }
+
+      .step-connector.completed {
+        background: #6366f1;
+      }
+
+      .step-icon {
+        width: 38px;
+        height: 38px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 13px;
+        font-weight: 500;
+        border: 2px solid transparent;
+        transition: all 0.35s ease;
+        position: relative;
+        z-index: 1;
+        background: #f8fafc; /* light background */
+        border-color: #e2e8f0;
+        color: #334155; /* darker slate for contrast */
+      }
+
+      .step.active .step-icon {
+        background: #ffffff;
+        border-color: #6366f1;
+        color: #1e293b; /* darker indigo/gray for contrast */
+        box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.12);
+      }
+
+      .step.completed .step-icon {
+        background: #4f46e5;
+        border-color: #4f46e5;
+        color: #fff; /* already high contrast */
+      }
+
+      .step-label {
+        margin-top: 10px;
+        font-size: 12px;
+        text-align: center;
+        max-width: 80px;
+        line-height: 1.3;
+        color: #94a3b8;
+        transition: color 0.3s;
+      }
+
+      .step.active .step-label {
+        color: #0f172a;
+        font-weight: 500;
+      }
+
+      .step.completed .step-label {
+        color: #475569;
+      }
+
+      .step-sublabel {
+        margin-top: 3px;
+        font-size: 11px;
+        text-align: center;
+        max-width: 88px;
+        line-height: 1.3;
+        color: #cbd5e1;
+        transition: color 0.3s;
+      }
+
+      .step.active .step-sublabel,
+      .step.completed .step-sublabel {
+        color: #94a3b8;
+      }
+
+      /* status pill */
+      .status-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+        font-size: 11px;
+        padding: 4px 12px;
+        border-radius: 999px;
+        border: 1px solid #e2e8f0;
+        color: #64748b;
+        background: #f8fafc;
+        margin-top: 14px;
+      }
+
+      .pulse-dot {
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: #6366f1;
+        flex-shrink: 0;
+        animation: pulse 1.4s infinite;
+      }
+
+      @keyframes pulse {
+        0%,
+        100% {
+          opacity: 1;
+          transform: scale(1);
+        }
+        50% {
+          opacity: 0.4;
+          transform: scale(0.65);
+        }
+      }
     </style>
   </head>
 
@@ -48,11 +206,10 @@
         class="max-w-6xl mx-auto px-6 py-5 flex items-center justify-between"
       >
         <div class="font-display text-xl tracking-wide">ZORO</div>
-
         <div
           class="text-xs font-medium text-slate-700 bg-slate-50 border border-slate-200 px-3 py-1 rounded-full"
         >
-          Protected by 3-D Secure
+          Protected by 3‑D Secure
         </div>
       </div>
     </header>
@@ -60,29 +217,24 @@
     <main class="w-full">
       <!-- SHOP SECTION -->
       <section id="shopSection">
-        <!-- HERO -->
         <section class="text-center py-16 px-6">
           <h1
             class="font-display text-4xl md:text-5xl tracking-tight text-slate-900"
           >
             Spring Collection
           </h1>
-
           <p class="mt-4 text-sm text-slate-500 max-w-xl mx-auto">
-            Discover everyday essentials designed for comfort and style. Choose
-            your favorite piece and continue to checkout.
+            Discover everyday essentials designed for comfort and style. Select
+            an item to start the secure checkout demo.
           </p>
         </section>
 
-        <!-- PRODUCT GRID -->
         <div class="max-w-6xl mx-auto px-6 pb-16">
           <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
-            <!-- PRODUCT 1 -->
             <button
               type="button"
-              data-risk="low"
+              data-price="19"
               data-name="Classic T-Shirt"
-              data-price="$19.00"
               class="product-card text-left group"
             >
               <div class="relative h-56 overflow-hidden bg-slate-100">
@@ -91,37 +243,30 @@
                   alt="Classic T-Shirt"
                   class="card-img w-full h-full object-cover"
                 />
-
                 <div
                   class="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition"
                 ></div>
               </div>
-
               <div class="pt-3 space-y-1">
                 <div
                   class="text-base font-medium tracking-tight text-slate-900"
                 >
                   Classic T‑Shirt
                 </div>
-
                 <div class="flex items-center justify-between">
                   <span class="text-lg font-semibold">$19.00</span>
-
                   <span
                     class="text-xs bg-slate-900 text-white px-2 py-1 rounded"
+                    >Low risk</span
                   >
-                    Low risk
-                  </span>
                 </div>
               </div>
             </button>
 
-            <!-- PRODUCT 2 -->
             <button
               type="button"
-              data-risk="high"
+              data-price="89"
               data-name="Leather Jacket"
-              data-price="$89.00"
               class="product-card text-left group"
             >
               <div class="relative h-56 overflow-hidden bg-slate-100">
@@ -130,35 +275,28 @@
                   alt="Leather Jacket"
                   class="card-img w-full h-full object-cover"
                 />
-
                 <div
                   class="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition"
                 ></div>
               </div>
-
               <div class="pt-3 space-y-1">
                 <div class="text-base font-medium tracking-tight">
                   Leather Jacket
                 </div>
-
                 <div class="flex items-center justify-between">
                   <span class="text-lg font-semibold">$89.00</span>
-
                   <span
                     class="text-xs bg-slate-900 text-white px-2 py-1 rounded"
+                    >High risk</span
                   >
-                    High risk
-                  </span>
                 </div>
               </div>
             </button>
 
-            <!-- PRODUCT 3 -->
             <button
               type="button"
-              data-risk="low"
+              data-price="64.99"
               data-name="Leather Boots"
-              data-price="$64.99"
               class="product-card text-left group"
             >
               <div class="relative h-56 overflow-hidden bg-slate-100">
@@ -167,74 +305,58 @@
                   alt="Leather Boots"
                   class="card-img w-full h-full object-cover"
                 />
-
                 <div
                   class="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition"
                 ></div>
               </div>
-
               <div class="pt-3 space-y-1">
                 <div class="text-base font-medium tracking-tight">
                   Leather Boots
                 </div>
-
                 <div class="flex items-center justify-between">
                   <span class="text-lg font-semibold">$64.99</span>
-
                   <span
                     class="text-xs bg-slate-900 text-white px-2 py-1 rounded"
+                    >High risk</span
                   >
-                    Low risk
-                  </span>
                 </div>
               </div>
             </button>
 
-            <!-- PRODUCT 4 -->
             <button
               type="button"
-              data-risk="high"
-              data-name="Cozy Hoodie"
-              data-price="$74.50"
+              data-price="74.50"
+              data-name="Oversized Hoodie"
               class="product-card text-left group"
             >
               <div class="relative h-56 overflow-hidden bg-slate-100">
                 <img
                   src="https://images.unsplash.com/photo-1685328403732-64be6bb9d112?q=80&w=3131&auto=format&fit=crop"
-                  alt="Cozy Hoodie"
+                  alt="Oversized Hoodie"
                   class="card-img w-full h-full object-cover"
                 />
-
                 <div
                   class="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition"
                 ></div>
               </div>
-
               <div class="pt-3 space-y-1">
                 <div class="text-base font-medium tracking-tight">
-                  Cozy Hoodie
+                  Oversized Hoodie
                 </div>
-
                 <div class="flex items-center justify-between">
                   <span class="text-lg font-semibold">$74.50</span>
-
                   <span
                     class="text-xs bg-slate-900 text-white px-2 py-1 rounded"
+                    >High risk</span
                   >
-                    High risk
-                  </span>
                 </div>
               </div>
             </button>
           </div>
-
-          <!-- DEMO EXPLANATION -->
           <div class="text-center text-xs text-slate-500 mt-14">
-            <span class="font-medium">Low risk</span>
-            → frictionless authentication &nbsp;·&nbsp;
-
-            <span class="font-medium">High risk</span>
-            → OTP challenge required
+            <span class="font-medium">Low risk</span> → frictionless
+            authentication &nbsp;·&nbsp;
+            <span class="font-medium">High risk</span> → OTP challenge required
           </div>
         </div>
       </section>
@@ -255,50 +377,54 @@
                   >
                     ← Back to shop
                   </button>
-
                   <h1 class="text-xl font-semibold">Secure Checkout</h1>
-
                   <p class="text-sm text-slate-600 mt-1">
                     Demonstrating EMV 3‑D Secure authentication flow.
                   </p>
                 </div>
-
-                <div
-                  class="rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-right"
-                >
-                  <div class="text-xs text-slate-500">Protected by</div>
-                  <div class="text-sm font-semibold">3DS2</div>
-                </div>
               </div>
             </header>
 
+            <!-- ── Step Indicator ── -->
             <div
-              class="mb-5 rounded-xl border border-slate-200 bg-slate-50 px-4 py-3"
+              class="mb-5 rounded-xl border border-slate-200 bg-slate-50 px-5 py-4"
             >
-              <div
-                class="flex items-center justify-between text-xs font-medium text-slate-600"
-              >
-                <div id="stepMerchant" class="flex items-center gap-2">
-                  <span class="h-2 w-2 rounded-full bg-indigo-600"></span>
-                  Merchant
+              <div class="stepper" id="stepper">
+                <div class="step" id="s0">
+                  <div class="step-icon" id="si0">1</div>
+                  <div class="step-label">Merchant</div>
+                  <div class="step-sublabel">Transaction init</div>
                 </div>
 
-                <div class="flex-1 h-px bg-slate-200 mx-3"></div>
+                <div class="step-connector" id="sc0"></div>
 
-                <div id="stepDirectory" class="flex items-center gap-2">
-                  <span class="h-2 w-2 rounded-full bg-slate-300"></span>
-                  Directory Server
+                <div class="step" id="s1">
+                  <div class="step-icon" id="si1">2</div>
+                  <div class="step-label">Directory Server</div>
+                  <div class="step-sublabel">Card &amp; network</div>
                 </div>
 
-                <div class="flex-1 h-px bg-slate-200 mx-3"></div>
+                <div class="step-connector" id="sc1"></div>
 
-                <div id="stepIssuer" class="flex items-center gap-2">
-                  <span class="h-2 w-2 rounded-full bg-slate-300"></span>
-                  Issuer / ACS
+                <div class="step" id="s2">
+                  <div class="step-icon" id="si2">3</div>
+                  <div class="step-label">Issuer / ACS</div>
+                  <div class="step-sublabel">Cardholder verify</div>
+                </div>
+              </div>
+
+              <div style="display: flex; justify-content: center">
+                <div class="status-pill">
+                  <span class="pulse-dot" id="pulseDot"></span>
+                  <span id="stepStatusText"
+                    >Merchant — transaction initialised</span
+                  >
                 </div>
               </div>
             </div>
+            <!-- ── /Step Indicator ── -->
 
+            <!-- Transaction Summary -->
             <section class="space-y-4">
               <div class="rounded-xl bg-slate-50 border border-slate-200 p-4">
                 <div class="flex items-start justify-between gap-4">
@@ -308,7 +434,6 @@
                       <span id="orderItemName">Demo Transaction</span>
                     </div>
                   </div>
-
                   <div class="text-right">
                     <div class="text-xs text-slate-500">Amount</div>
                     <div class="font-semibold">
@@ -318,20 +443,19 @@
                 </div>
               </div>
 
+              <!-- Authentication Mode Toggle -->
               <div class="space-y-2">
                 <div class="text-sm font-medium">Authentication Mode</div>
-
                 <div
                   class="flex rounded-xl border border-slate-200 overflow-hidden"
                 >
                   <button
                     id="riskLowBtn"
                     type="button"
-                    class="flex-1 px-3 py-2 text-sm font-medium bg-white"
+                    class="flex-1 px-3 py-2 text-sm font-medium bg-white text-slate-700"
                   >
                     Frictionless
                   </button>
-
                   <button
                     id="riskHighBtn"
                     type="button"
@@ -342,6 +466,7 @@
                 </div>
               </div>
 
+              <!-- Terms -->
               <label
                 class="flex items-start gap-3 rounded-xl border border-slate-200 bg-white px-4 py-3"
               >
@@ -350,12 +475,12 @@
                   type="checkbox"
                   class="mt-1 h-4 w-4"
                 />
-
-                <span class="text-sm text-slate-700">
-                  I authorize this demo transaction.
-                </span>
+                <span class="text-sm text-slate-700"
+                  >I authorize this demo transaction.</span
+                >
               </label>
 
+              <!-- Pay Button -->
               <button
                 id="payBtn"
                 type="button"
@@ -365,6 +490,7 @@
                 Submit Payment
               </button>
 
+              <!-- System Log -->
               <div
                 id="systemLog"
                 class="mt-4 rounded-xl border border-slate-200 bg-black text-green-400 text-xs font-mono px-3 py-3 h-28 overflow-auto"
@@ -383,20 +509,20 @@
             <header class="mb-4">
               <h2 class="text-lg font-semibold">Payment Successful ✅</h2>
             </header>
-
             <div class="rounded-xl bg-slate-50 border border-slate-200 p-4">
               <div class="flex items-center justify-between text-sm mt-2">
                 <span class="text-slate-600">3DS Flow</span>
-
                 <span
                   id="successFlow"
                   class="px-2 py-1 rounded bg-slate-100 text-xs font-medium"
+                  >----</span
                 >
-                  ----
-                </span>
+              </div>
+              <div class="mt-2 text-xs text-slate-500">
+                Thank you for shopping at Zoro. A receipt of your transaction is
+                shown here.
               </div>
             </div>
-
             <div class="mt-5">
               <button
                 id="backToShopBtn"
@@ -410,36 +536,38 @@
         </div>
       </section>
 
-      <!-- MODAL -->
+      <!-- OTP MODAL -->
       <div
         id="modalOverlay"
-        class="fixed inset-0 hidden items-center justify-center bg-black/50 p-4"
+        class="fixed inset-0 z-50 hidden items-center justify-center bg-black/50 p-4"
       >
         <div
           class="w-full max-w-sm bg-white rounded-2xl shadow-xl border border-slate-200 p-6"
         >
           <h2 class="text-lg font-semibold">Issuer Authentication (ACS)</h2>
-
           <form id="otpForm" class="mt-5 space-y-3" autocomplete="off">
             <div class="space-y-1">
               <label class="text-sm font-medium">
                 One-time code (OTP)
-
                 <input
                   id="otpInput"
+                  type="text"
                   inputmode="numeric"
+                  autocomplete="one-time-code"
                   class="w-full rounded-xl border border-slate-300 px-3 py-2"
                   placeholder="Enter 6-digit code"
+                  pattern="[0-9]{6}"
                   maxlength="6"
                   required
                 />
               </label>
-
               <p class="text-xs text-slate-600">
                 Demo OTP: <span class="font-mono">123456</span>
               </p>
+              <p id="otpTimer" class="text-xs text-red-500 font-mono">
+                Expires in 60s
+              </p>
             </div>
-
             <button
               id="confirmBtn"
               type="submit"
@@ -453,15 +581,19 @@
     </main>
 
     <script>
+      const DEMO_TIMEOUT = 5000;
+      const OTP_TIMEOUT = 60;
+      const MAX_OTP_ATTEMPTS = 3;
+
       const shopSection = document.getElementById("shopSection");
       const checkoutSection = document.getElementById("checkoutSection");
       const successSection = document.getElementById("successSection");
       const modalOverlay = document.getElementById("modalOverlay");
-
       const payBtn = document.getElementById("payBtn");
       const termsCheckbox = document.getElementById("termsCheckbox");
       const otpForm = document.getElementById("otpForm");
       const otpInput = document.getElementById("otpInput");
+      const confirmBtn = document.getElementById("confirmBtn");
       const systemLog = document.getElementById("systemLog");
       const successFlow = document.getElementById("successFlow");
       const backToShopBtn = document.getElementById("backToShopBtn");
@@ -472,8 +604,49 @@
       const riskHighBtn = document.getElementById("riskHighBtn");
       const orderItemName = document.getElementById("orderItemName");
       const orderAmountSpan = document.getElementById("orderAmountSpan");
+      const otpTimerEl = document.getElementById("otpTimer");
+      const stepStatusText = document.getElementById("stepStatusText");
+      const pulseDot = document.getElementById("pulseDot");
 
       let riskMode = "high";
+      let otpAttempts = 0;
+      let otpInterval;
+
+      /* ── Step indicator ── */
+      const CHECK_SVG = `<svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2.5 7L5.5 10L11.5 4" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+
+      const STEP_STATUSES = [
+        "Merchant — transaction initialised",
+        "Directory Server — routing &amp; lookup",
+        "Issuer / ACS — cardholder verified",
+      ];
+
+      function setStep(activeIdx) {
+        for (let i = 0; i < 3; i++) {
+          const stepEl = document.getElementById("s" + i);
+          const iconEl = document.getElementById("si" + i);
+
+          stepEl.classList.remove("active", "completed");
+          if (i < activeIdx) {
+            stepEl.classList.add("completed");
+            iconEl.innerHTML = CHECK_SVG;
+          } else if (i === activeIdx) {
+            stepEl.classList.add("active");
+            iconEl.textContent = i + 1;
+          } else {
+            iconEl.textContent = i + 1;
+          }
+        }
+
+        for (let i = 0; i < 2; i++) {
+          const conn = document.getElementById("sc" + i);
+          conn.classList.toggle("completed", i < activeIdx);
+        }
+
+        stepStatusText.innerHTML = STEP_STATUSES[activeIdx];
+        pulseDot.style.display = activeIdx === 2 ? "none" : "block";
+      }
+      /* ── /Step indicator ── */
 
       function log(msg) {
         const line = document.createElement("div");
@@ -482,23 +655,11 @@
         systemLog.scrollTop = systemLog.scrollHeight;
       }
 
-      function setStep(step) {
-        ["stepMerchant", "stepDirectory", "stepIssuer"].forEach((id) => {
-          document.getElementById(id).querySelector("span").className =
-            "h-2 w-2 rounded-full bg-slate-300";
-        });
-
-        document.getElementById(step).querySelector("span").className =
-          "h-2 w-2 rounded-full bg-indigo-600";
-      }
-
       function showOnly(section) {
         [shopSection, checkoutSection, successSection].forEach((s) =>
           s.classList.add("hidden"),
         );
-
         section.classList.remove("hidden");
-
         window.scrollTo({ top: 0 });
       }
 
@@ -506,45 +667,64 @@
         systemLog.innerHTML = "";
         termsCheckbox.checked = false;
         payBtn.disabled = true;
-        setStep("stepMerchant");
+        setStep(0);
         modalOverlay.classList.add("hidden");
+        modalOverlay.classList.remove("flex");
         otpInput.value = "";
+        clearInterval(otpInterval);
+        otpAttempts = 0;
       }
 
       function setRiskMode(mode) {
         riskMode = mode;
-
         riskLowBtn.className =
           "flex-1 px-3 py-2 text-sm font-medium " +
           (mode === "low"
             ? "bg-indigo-600 text-white"
             : "bg-white text-slate-700");
-
         riskHighBtn.className =
           "flex-1 px-3 py-2 text-sm font-medium " +
           (mode === "high"
             ? "bg-indigo-600 text-white"
             : "bg-white text-slate-700");
+        log(
+          `Authentication mode set to: ${mode === "low" ? "Frictionless" : "Challenge"}`,
+        );
+      }
+
+      function startOtpTimer() {
+        let timeLeft = OTP_TIMEOUT;
+        otpTimerEl.textContent = `Expires in ${timeLeft}s`;
+        otpInterval = setInterval(() => {
+          timeLeft--;
+          otpTimerEl.textContent = `Expires in ${timeLeft}s`;
+          if (timeLeft <= 0) {
+            clearInterval(otpInterval);
+            log("OTP expired");
+            modalOverlay.classList.add("hidden");
+            modalOverlay.classList.remove("flex");
+            alert("OTP expired! Restart checkout.");
+            showOnly(shopSection);
+          }
+        }, 1000);
       }
 
       shopSection.addEventListener("click", (e) => {
-        const btn = e.target.closest("[data-risk]");
+        const btn = e.target.closest("[data-price]");
         if (!btn) return;
-
         orderItemName.textContent = btn.dataset.name;
-        orderAmountSpan.textContent = btn.dataset.price;
-
+        orderAmountSpan.textContent = `$${Number.parseFloat(btn.dataset.price).toFixed(2)}`;
+        const dynamicRisk =
+          Number.parseFloat(btn.dataset.price) > 50 ? "high" : "low";
         resetCheckout();
-        setRiskMode(btn.dataset.risk);
+        setRiskMode(dynamicRisk);
         showOnly(checkoutSection);
-
-        log("Transaction initialized at merchant");
+        log(`Transaction initialized at merchant (${dynamicRisk} risk)`);
       });
 
       backToShopFromCheckout.addEventListener("click", () =>
         showOnly(shopSection),
       );
-
       backToShopBtn.addEventListener("click", () => {
         resetCheckout();
         showOnly(shopSection);
@@ -553,43 +733,58 @@
       riskLowBtn.addEventListener("click", () => setRiskMode("low"));
       riskHighBtn.addEventListener("click", () => setRiskMode("high"));
 
-      termsCheckbox.addEventListener("change", () => {
-        payBtn.disabled = !termsCheckbox.checked;
-      });
+      termsCheckbox.addEventListener(
+        "change",
+        () => (payBtn.disabled = !termsCheckbox.checked),
+      );
 
       payBtn.addEventListener("click", () => {
         log("AReq sent to Directory Server");
-        setStep("stepDirectory");
-
+        setStep(1);
         setTimeout(() => {
           log("ARes received");
-
           if (riskMode === "low") {
             log("Frictionless authentication approved");
+            setStep(2);
             goToSuccess("Frictionless");
           } else {
             log("Challenge required by issuer");
-            setStep("stepIssuer");
-
+            setStep(2);
             modalOverlay.classList.remove("hidden");
             modalOverlay.classList.add("flex");
+            otpInput.focus();
+            startOtpTimer();
           }
-        }, 1200);
+        }, DEMO_TIMEOUT);
       });
 
       otpForm.addEventListener("submit", (e) => {
         e.preventDefault();
-
+        otpAttempts++;
         if (otpInput.value.trim() === "123456") {
           log("OTP verified successfully");
-
+          clearInterval(otpInterval);
           modalOverlay.classList.add("hidden");
           modalOverlay.classList.remove("flex");
-
           goToSuccess("Challenge");
+        } else if (otpAttempts >= MAX_OTP_ATTEMPTS) {
+          log("Maximum OTP attempts reached. Restarting checkout.");
+          clearInterval(otpInterval);
+          modalOverlay.classList.add("hidden");
+          modalOverlay.classList.remove("flex");
+          alert("Too many incorrect OTP attempts. Restart checkout.");
+          showOnly(shopSection);
         } else {
-          log("OTP verification failed — try again");
+          log(`OTP verification failed (attempt ${otpAttempts}) — try again`);
+          otpInput.value = "";
         }
+      });
+
+      otpInput.addEventListener("keydown", (e) => {
+        if (e.key !== "Enter") return;
+        e.preventDefault();
+        if (typeof otpForm.requestSubmit === "function") otpForm.requestSubmit();
+        else confirmBtn.click();
       });
 
       function goToSuccess(flow) {
